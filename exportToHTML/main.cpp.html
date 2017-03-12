@@ -36,47 +36,38 @@ main.cpp</FONT>
   
 </span><span class="s4">using namespace </span><span class="s1">std;  
   
-</span><span class="s2">#define </span><span class="s1">MAX </span><span class="s5">10 </span><span class="s1"> 
+</span><span class="s2">#define </span><span class="s1">MAX </span><span class="s5">10</span><span class="s1"> 
+</span><span class="s2">#define </span><span class="s1">LIMIT </span><span class="s5">30</span><span class="s1"> 
   
 </span><span class="s0">//Class Definitions </span><span class="s1"> 
-</span><span class="s4">class </span><span class="s1">Entry                                                          </span><span class="s0">//Entry Class</span><span class="s1"> 
+</span><span class="s4">class </span><span class="s1">Entry                                                      </span><span class="s0">//Entry Class - Linked List Implementation</span><span class="s1"> 
 {  
 </span><span class="s4">public </span><span class="s1">:  
-    </span><span class="s4">char </span><span class="s1">word[MAX],meaning[MAX]; 
+    </span><span class="s4">char </span><span class="s1">word[LIMIT],meaning[LIMIT]; 
+    Entry *next; 
 };  
   
 </span><span class="s4">class </span><span class="s1">HashTable                                                     </span><span class="s0">//Hash Table Class </span><span class="s1"> 
 {  
-    Entry ht[MAX];  
-    </span><span class="s4">void </span><span class="s1">insert(Entry);  
-    </span><span class="s4">void </span><span class="s1">insertQ(Entry);  
+    Entry *ht[MAX]; 
+    </span><span class="s4">void </span><span class="s1">insert(Entry *); 
     </span><span class="s4">inline int </span><span class="s1">HashFunc(</span><span class="s4">char </span><span class="s1">[]);  
 </span><span class="s4">public </span><span class="s1">:  
     HashTable()  
     {  
         </span><span class="s4">for</span><span class="s1">(</span><span class="s4">int </span><span class="s1">i=</span><span class="s5">0</span><span class="s1">;i&lt;MAX;i++)  
-        {  
-            strcpy(ht[i].word,</span><span class="s3">&quot;&quot;</span><span class="s1">); 
-            strcpy(ht[i].meaning,</span><span class="s3">&quot;&quot;</span><span class="s1">); 
+        { 
+            ht[i] = NULL; 
         }  
-    }  
-    </span><span class="s4">bool </span><span class="s1">isFull()  
-    {  
-        </span><span class="s4">for</span><span class="s1">(</span><span class="s4">int </span><span class="s1">i=</span><span class="s5">0</span><span class="s1">;i&lt;MAX;i++)  
-        {  
-            </span><span class="s4">if</span><span class="s1">(strcmp(ht[i].word,</span><span class="s3">&quot;&quot;</span><span class="s1">)==</span><span class="s5">0</span><span class="s1">) 
-            {  
-                </span><span class="s4">return false</span><span class="s1">;  
-            }  
-        }  
-        </span><span class="s4">return true</span><span class="s1">;  
-    }  
+    } 
     </span><span class="s4">void </span><span class="s1">clr()  
     {  
         </span><span class="s4">for</span><span class="s1">(</span><span class="s4">int </span><span class="s1">i=</span><span class="s5">0</span><span class="s1">;i&lt;MAX;i++)  
-        {  
-            strcpy(ht[i].word,</span><span class="s3">&quot;&quot;</span><span class="s1">); 
-            strcpy(ht[i].meaning,</span><span class="s3">&quot;&quot;</span><span class="s1">); 
+        { 
+            ht[i] = </span><span class="s4">new </span><span class="s1">Entry; 
+            strcpy(ht[i]-&gt;word,</span><span class="s3">&quot;&quot;</span><span class="s1">); 
+            strcpy(ht[i]-&gt;meaning,</span><span class="s3">&quot;&quot;</span><span class="s1">); 
+            ht[i]-&gt;next = NULL; 
         }  
     }  
     </span><span class="s4">void </span><span class="s1">construct();  
@@ -86,89 +77,33 @@ main.cpp</FONT>
 };  
   
 </span><span class="s4">void </span><span class="s1">HashTable::construct()                                           </span><span class="s0">//Function for Insertion </span><span class="s1"> 
-{  
-    </span><span class="s4">if</span><span class="s1">(isFull())  
-    {  
-        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Sorry, the Dictionary is Full.&quot;</span><span class="s1">; 
-        </span><span class="s4">return</span><span class="s1">;  
-    }  
-      
-    </span><span class="s4">int </span><span class="s1">ch = </span><span class="s5">0</span><span class="s1">;  
-    cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n\n</span><span class="s3"> 1 for Linear Hashing.&quot;</span><span class="s1">;  
-    cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3"> 2 for Quadratic Hashing.&quot;</span><span class="s1">;  
-    cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Enter which Hashing Technique to use ? &quot;</span><span class="s1">;  
-    cin&gt;&gt;ch;  
-    </span><span class="s4">if</span><span class="s1">(ch==</span><span class="s5">1</span><span class="s1">)  
-    {  
-        Entry B;  
-        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Enter Entry Details :- &quot;</span><span class="s1">; 
-        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Enter Word   </span><span class="s4">\t</span><span class="s3">: &quot;</span><span class="s1">; 
-        cin&gt;&gt;B.word; 
-        cout&lt;&lt;</span><span class="s3">&quot;Enter Meaning</span><span class="s4">\t</span><span class="s3">: &quot;</span><span class="s1">; 
-        cin&gt;&gt;B.meaning; 
-        insert(B);  
-    }  
-    </span><span class="s4">else if</span><span class="s1">(ch==</span><span class="s5">2</span><span class="s1">)  
-    {  
-        Entry B;  
-        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Enter Entry Details :- &quot;</span><span class="s1">; 
-        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Enter Word   </span><span class="s4">\t</span><span class="s3">: &quot;</span><span class="s1">; 
-        cin&gt;&gt;B.word; 
-        cout&lt;&lt;</span><span class="s3">&quot;Enter Meaning</span><span class="s4">\t</span><span class="s3">: &quot;</span><span class="s1">; 
-        cin&gt;&gt;B.meaning; 
-        insertQ(B);  
-    }  
-    </span><span class="s4">else</span><span class="s1">  
-        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Invalid Option!&quot;</span><span class="s1">;  
+{ 
+    Entry *B; 
+    B = </span><span class="s4">new </span><span class="s1">Entry(); 
+    cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Enter Entry Details :- &quot;</span><span class="s1">; 
+    cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Enter Word   </span><span class="s4">\t</span><span class="s3">: &quot;</span><span class="s1">; 
+    cin&gt;&gt;B-&gt;word; 
+    cout&lt;&lt;</span><span class="s3">&quot;Enter Meaning</span><span class="s4">\t</span><span class="s3">: &quot;</span><span class="s1">; 
+    cin&gt;&gt;B-&gt;meaning; 
+    B-&gt;next = NULL; 
+    insert(B); 
 }  
   
-</span><span class="s4">void </span><span class="s1">HashTable::insert(Entry B)                                         </span><span class="s0">//Insertion using Linear Probing </span><span class="s1"> 
+</span><span class="s4">void </span><span class="s1">HashTable::insert(Entry *B)                                         </span><span class="s0">//Insertion</span><span class="s1"> 
 {  
     </span><span class="s4">int </span><span class="s1">pos;  
-    pos = HashFunc(B.word); 
-    </span><span class="s4">if</span><span class="s1">(strcmp(ht[pos].word,</span><span class="s3">&quot;&quot;</span><span class="s1">)==</span><span class="s5">0</span><span class="s1">) 
-    {  
+    pos = HashFunc(B-&gt;word); 
+    </span><span class="s4">if</span><span class="s1">(ht[pos]==NULL) 
+    { 
         ht[pos] = B; 
-        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Word inserted Successfully!&quot;</span><span class="s1">; 
-    }  
-    </span><span class="s4">else</span><span class="s1">  
-    {  
-        </span><span class="s4">int </span><span class="s1">i=pos;  
-        </span><span class="s4">do</span><span class="s1">  
-        {  
-            </span><span class="s4">if</span><span class="s1">(strcmp(ht[i].word,</span><span class="s3">&quot;&quot;</span><span class="s1">)==</span><span class="s5">0</span><span class="s1">) 
-            {  
-                ht[i] = B; 
-                cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Word inserted Successfully!&quot;</span><span class="s1">; 
-                </span><span class="s4">break</span><span class="s1">;  
-            }  
-            i=(i+</span><span class="s5">1</span><span class="s1">)%MAX;  
-        }</span><span class="s4">while</span><span class="s1">(i!=pos);  
-    }  
-}  
-  
-</span><span class="s4">void </span><span class="s1">HashTable::insertQ(Entry B)                                         </span><span class="s0">//Insertion using Quadratic Probing </span><span class="s1"> 
-{  
-    </span><span class="s4">int </span><span class="s1">pos;  
-    pos = HashFunc(B.word); 
-    </span><span class="s4">if</span><span class="s1">(strcmp(ht[pos].word,</span><span class="s3">&quot;&quot;</span><span class="s1">)==</span><span class="s5">0</span><span class="s1">) 
-    {  
-        ht[pos] = B; 
-        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Word inserted Successfully!&quot;</span><span class="s1">; 
-    }  
-    </span><span class="s4">else</span><span class="s1">  
-    {  
-        </span><span class="s4">for</span><span class="s1">(</span><span class="s4">int </span><span class="s1">i=</span><span class="s5">1</span><span class="s1">; i&lt;(MAX-</span><span class="s5">1</span><span class="s1">)/</span><span class="s5">2</span><span class="s1">; i++)  
-        {  
-            </span><span class="s4">if</span><span class="s1">(strcmp(ht[(pos+(i*i))%MAX].word,</span><span class="s3">&quot;&quot;</span><span class="s1">)==</span><span class="s5">0</span><span class="s1">) 
-            {  
-                ht[(pos+(i*i))%MAX] = B; 
-                cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Word inserted Successfully!&quot;</span><span class="s1">; 
-                </span><span class="s4">break</span><span class="s1">;  
-            }  
-        }  
-    }  
-}  
+    } 
+    </span><span class="s4">else</span><span class="s1"> 
+    { 
+        B-&gt;next = ht[pos]-&gt;next; 
+        ht[pos]-&gt;next = B; 
+    } 
+    cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Word inserted Successfully!&quot;</span><span class="s1">; 
+} 
   
 </span><span class="s4">inline int </span><span class="s1">HashTable::HashFunc(</span><span class="s4">char </span><span class="s1">key[MAX])                             </span><span class="s0">//Hash Function</span><span class="s1"> 
 {  
@@ -179,15 +114,22 @@ main.cpp</FONT>
 }  
   
 </span><span class="s4">void </span><span class="s1">HashTable::display()                                               </span><span class="s0">//Display</span><span class="s1"> 
-{  
+{ 
+    Entry *curr; 
     cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n\t\t</span><span class="s3">Dictionary&quot;</span><span class="s1">; 
     cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">---------------------------------------------&quot;</span><span class="s1">;  
-    cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Pos.</span><span class="s4">\t</span><span class="s3">Word</span><span class="s4">\t\t</span><span class="s3">Meaning&quot;</span><span class="s1">; 
+    cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Word - Meaning&quot;</span><span class="s1">; 
     cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">---------------------------------------------&quot;</span><span class="s1">;  
     </span><span class="s4">for</span><span class="s1">(</span><span class="s4">int </span><span class="s1">i=</span><span class="s5">0</span><span class="s1">;i&lt;MAX;i++)  
-    {  
-        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">&quot;</span><span class="s1">&lt;&lt;i&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\t</span><span class="s3">&quot;</span><span class="s1">&lt;&lt;ht[i].word&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\t\t</span><span class="s3">&quot;</span><span class="s1">&lt;&lt;ht[i].meaning; 
-    }  
+    { 
+        curr = ht[i]; 
+        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">&quot;</span><span class="s1">; 
+        </span><span class="s4">while</span><span class="s1">(curr!=NULL) 
+        { 
+            cout&lt;&lt;curr-&gt;word&lt;&lt;</span><span class="s3">&quot; - &quot;</span><span class="s1">&lt;&lt;curr-&gt;meaning&lt;&lt;</span><span class="s3">&quot;, &quot;</span><span class="s1">; 
+            curr = curr-&gt;next; 
+        } 
+    } 
     cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">---------------------------------------------&quot;</span><span class="s1">;  
     cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">MAX is &quot;</span><span class="s1">&lt;&lt;MAX;  
 }  
@@ -199,25 +141,26 @@ main.cpp</FONT>
     cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Enter word to Search : &quot;</span><span class="s1">; 
     cin&gt;&gt;word; 
     pos = HashFunc(word); 
-    </span><span class="s4">if</span><span class="s1">(strcmp(ht[pos].word,word)==</span><span class="s5">0</span><span class="s1">) 
+    </span><span class="s4">if</span><span class="s1">(strcmp(ht[pos]-&gt;word,word)==</span><span class="s5">0</span><span class="s1">) 
     { 
-        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Word   </span><span class="s4">\t</span><span class="s3">: &quot;</span><span class="s1">&lt;&lt;ht[pos].word; 
-        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Meaning</span><span class="s4">\t</span><span class="s3">: &quot;</span><span class="s1">&lt;&lt;ht[pos].meaning; 
+        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Word   </span><span class="s4">\t</span><span class="s3">: &quot;</span><span class="s1">&lt;&lt;ht[pos]-&gt;word; 
+        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Meaning</span><span class="s4">\t</span><span class="s3">: &quot;</span><span class="s1">&lt;&lt;ht[pos]-&gt;meaning; 
         </span><span class="s4">return</span><span class="s1">;  
     }  
     </span><span class="s4">else</span><span class="s1">  
     {  
-        </span><span class="s4">int </span><span class="s1">i=pos;  
-        </span><span class="s4">do</span><span class="s1">  
-        {  
-            </span><span class="s4">if</span><span class="s1">(strcmp(ht[i].word,word)==</span><span class="s5">0</span><span class="s1">) 
+        Entry *temp; 
+        temp = ht[pos]-&gt;next; 
+        </span><span class="s4">while</span><span class="s1">(temp!=NULL) 
+        { 
+            </span><span class="s4">if </span><span class="s1">(strcmp(temp-&gt;word, word) == </span><span class="s5">0</span><span class="s1">) 
             { 
-                cout &lt;&lt; </span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Word   </span><span class="s4">\t</span><span class="s3">: &quot; </span><span class="s1">&lt;&lt; ht[i].word; 
-                cout &lt;&lt; </span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Meaning</span><span class="s4">\t</span><span class="s3">: &quot; </span><span class="s1">&lt;&lt; ht[i].meaning; 
-                </span><span class="s4">return</span><span class="s1">;  
-            }  
-            i=(i+</span><span class="s5">1</span><span class="s1">)%MAX;  
-        }</span><span class="s4">while</span><span class="s1">(i!=pos);  
+                cout &lt;&lt; </span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Word   </span><span class="s4">\t</span><span class="s3">: &quot; </span><span class="s1">&lt;&lt; temp-&gt;word; 
+                cout &lt;&lt; </span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Meaning</span><span class="s4">\t</span><span class="s3">: &quot; </span><span class="s1">&lt;&lt; temp-&gt;meaning; 
+                </span><span class="s4">return</span><span class="s1">; 
+            } 
+            temp = temp-&gt;next; 
+        } 
         cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Word NOT found!&quot;</span><span class="s1">; 
     }  
 } 
@@ -229,29 +172,27 @@ main.cpp</FONT>
     cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Enter word to Delete : &quot;</span><span class="s1">; 
     cin&gt;&gt;word; 
     pos = HashFunc(word); 
-    </span><span class="s4">if</span><span class="s1">(strcmp(ht[pos].word,word)==</span><span class="s5">0</span><span class="s1">) 
+    </span><span class="s4">if</span><span class="s1">(strcmp(ht[pos]-&gt;word,word)==</span><span class="s5">0</span><span class="s1">) 
     { 
-        strcpy(ht[pos].word,</span><span class="s3">&quot;&quot;</span><span class="s1">); 
-        strcpy(ht[pos].meaning,</span><span class="s3">&quot;&quot;</span><span class="s1">); 
+        ht[pos] = ht[pos]-&gt;next; 
         cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Word deleted Successfully!&quot;</span><span class="s1">; 
         </span><span class="s4">return</span><span class="s1">; 
     } 
-    </span><span class="s4">else</span><span class="s1"> 
+    Entry *temp,*prev; 
+    prev = ht[pos]; 
+    temp = prev-&gt;next; 
+    </span><span class="s4">while</span><span class="s1">(temp!=NULL) 
     { 
-        </span><span class="s4">int </span><span class="s1">i=pos; 
-        </span><span class="s4">do</span><span class="s1"> 
+        </span><span class="s4">if </span><span class="s1">(strcmp(temp-&gt;word, word) == </span><span class="s5">0</span><span class="s1">) 
         { 
-            </span><span class="s4">if</span><span class="s1">(strcmp(ht[i].word,word)==</span><span class="s5">0</span><span class="s1">) 
-            { 
-                strcpy(ht[i].word,</span><span class="s3">&quot;&quot;</span><span class="s1">); 
-                strcpy(ht[i].meaning,</span><span class="s3">&quot;&quot;</span><span class="s1">); 
-                cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Word deleted Successfully!&quot;</span><span class="s1">; 
-                </span><span class="s4">return</span><span class="s1">; 
-            } 
-            i=(i+</span><span class="s5">1</span><span class="s1">)%MAX; 
-        }</span><span class="s4">while</span><span class="s1">(i!=pos); 
-        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Word NOT found!&quot;</span><span class="s1">; 
+            prev-&gt;next = temp-&gt;next; 
+            cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Word deleted Successfully!&quot;</span><span class="s1">; 
+            </span><span class="s4">return</span><span class="s1">; 
+        } 
+        temp = temp-&gt;next; 
+        prev = prev-&gt;next; 
     } 
+    cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Word NOT found!&quot;</span><span class="s1">; 
 } 
   
 </span><span class="s0">//main() </span><span class="s1"> 
@@ -270,7 +211,6 @@ main.cpp</FONT>
         cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3"> 2 to Display Dictionary&quot;</span><span class="s1">; 
         cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3"> 3 to Search a word&quot;</span><span class="s1">; 
         cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3"> 4 to Delete a word&quot;</span><span class="s1">; 
-        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3"> 5 for IsFull&quot;</span><span class="s1">; 
         cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3"> -1 to Clear whole Dictionary&quot;</span><span class="s1">; 
         cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">  0 to Quit&quot;</span><span class="s1">;  
         cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Enter your choice : &quot;</span><span class="s1">;  
@@ -289,12 +229,6 @@ main.cpp</FONT>
             </span><span class="s4">case </span><span class="s5">4 </span><span class="s1">: 
                 obj.delete_word(); 
                 </span><span class="s4">break</span><span class="s1">; 
-            </span><span class="s4">case </span><span class="s5">5 </span><span class="s1">: 
-                </span><span class="s4">if</span><span class="s1">(obj.isFull())  
-                    cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Yes, the Dictionary is Completely Full.&quot;</span><span class="s1">; 
-                </span><span class="s4">else</span><span class="s1">  
-                    cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">No, the Dictionary is Not full.&quot;</span><span class="s1">; 
-                </span><span class="s4">break</span><span class="s1">;  
             </span><span class="s4">case </span><span class="s1">-</span><span class="s5">1 </span><span class="s1">: cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Are you sure, you want to clear dictionary (y/n) ? &quot;</span><span class="s1">; 
                 cin&gt;&gt;choice;  
                 </span><span class="s4">if</span><span class="s1">(choice==</span><span class="s3">'y'</span><span class="s1">||choice==</span><span class="s3">'Y'</span><span class="s1">)  
@@ -324,6 +258,251 @@ main.cpp</FONT>
   
 </span><span class="s0">/* OUTPUT  
  
+Program to implement Dictionary using Hash Table. 
+ 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+ 1 to Insert new Word 
+ 2 to Display Dictionary 
+ 3 to Search a word 
+ 4 to Delete a word 
+ -1 to Clear whole Dictionary 
+  0 to Quit 
+Enter your choice : 1 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+ 
+Enter Entry Details :- 
+Enter Word      : computer 
+Enter Meaning   : pc 
+ 
+Word inserted Successfully! 
+ 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+ 1 to Insert new Word 
+ 2 to Display Dictionary 
+ 3 to Search a word 
+ 4 to Delete a word 
+ -1 to Clear whole Dictionary 
+  0 to Quit 
+Enter your choice : 1 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+ 
+Enter Entry Details :- 
+Enter Word      : laptop 
+ laptop 
+Enter Meaning   : notebook 
+ 
+Word inserted Successfully! 
+ 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+ 1 to Insert new Word 
+ 2 to Display Dictionary 
+ 3 to Search a word 
+ 4 to Delete a word 
+ -1 to Clear whole Dictionary 
+  0 to Quit 
+Enter your choice : 1 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+ 
+Enter Entry Details :- 
+Enter Word      : eclipse 
+Enter Meaning   : hide 
+ 
+Word inserted Successfully! 
+ 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+ 1 to Insert new Word 
+ 2 to Display Dictionary 
+ 3 to Search a word 
+ 4 to Delete a word 
+ -1 to Clear whole Dictionary 
+  0 to Quit 
+Enter your choice : 2 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+ 
+                Dictionary 
+--------------------------------------------- 
+Word - Meaning 
+--------------------------------------------- 
+ 
+eclipse - hide, 
+ 
+ 
+ 
+ 
+laptop - notebook, 
+ 
+ 
+computer - pc, 
+--------------------------------------------- 
+MAX is 10 
+ 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+ 1 to Insert new Word 
+ 2 to Display Dictionary 
+ 3 to Search a word 
+ 4 to Delete a word 
+ -1 to Clear whole Dictionary 
+  0 to Quit 
+Enter your choice : 1 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+ 
+Enter Entry Details :- 
+Enter Word      : structure 
+Enter Meaning   : organisation 
+ 
+Word inserted Successfully! 
+ 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+ 1 to Insert new Word 
+ 2 to Display Dictionary 
+ 3 to Search a word 
+ 4 to Delete a word 
+ -1 to Clear whole Dictionary 
+  0 to Quit 
+Enter your choice : 1 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+ 
+Enter Entry Details :- 
+Enter Word      : data 
+Enter Meaning   : statistics 
+ 
+Word inserted Successfully! 
+ 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+ 1 to Insert new Word 
+ 2 to Display Dictionary 
+ 3 to Search a word 
+ 4 to Delete a word 
+ -1 to Clear whole Dictionary 
+  0 to Quit 
+Enter your choice : 2 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+ 
+                Dictionary 
+--------------------------------------------- 
+Word - Meaning 
+--------------------------------------------- 
+data - statistics, 
+eclipse - hide, 
+ 
+ 
+ 
+ 
+laptop - notebook, 
+ 
+ 
+computer - pc, structure - organisation, 
+--------------------------------------------- 
+MAX is 10 
+ 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+ 1 to Insert new Word 
+ 2 to Display Dictionary 
+ 3 to Search a word 
+ 4 to Delete a word 
+ -1 to Clear whole Dictionary 
+  0 to Quit 
+Enter your choice : 3 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+ 
+Enter word to Search : structure 
+ 
+Word    : structure 
+Meaning : organisation 
+ 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+ 1 to Insert new Word 
+ 2 to Display Dictionary 
+ 3 to Search a word 
+ 4 to Delete a word 
+ -1 to Clear whole Dictionary 
+  0 to Quit 
+Enter your choice : 4 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+ 
+Enter word to Delete : computer 
+ 
+Word deleted Successfully! 
+ 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+ 1 to Insert new Word 
+ 2 to Display Dictionary 
+ 3 to Search a word 
+ 4 to Delete a word 
+ -1 to Clear whole Dictionary 
+  0 to Quit 
+Enter your choice : 2 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+ 
+                Dictionary 
+--------------------------------------------- 
+Word - Meaning 
+--------------------------------------------- 
+data - statistics, 
+eclipse - hide, 
+ 
+ 
+ 
+ 
+laptop - notebook, 
+ 
+ 
+structure - organisation, 
+--------------------------------------------- 
+MAX is 10 
+ 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+ 1 to Insert new Word 
+ 2 to Display Dictionary 
+ 3 to Search a word 
+ 4 to Delete a word 
+ -1 to Clear whole Dictionary 
+  0 to Quit 
+Enter your choice : 4 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+ 
+Enter word to Delete : structure 
+ 
+Word deleted Successfully! 
+ 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+ 1 to Insert new Word 
+ 2 to Display Dictionary 
+ 3 to Search a word 
+ 4 to Delete a word 
+ -1 to Clear whole Dictionary 
+  0 to Quit 
+Enter your choice : 2 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+ 
+                Dictionary 
+--------------------------------------------- 
+Word - Meaning 
+--------------------------------------------- 
+data - statistics, 
+eclipse - hide, 
+ 
+ 
+ 
+ 
+laptop - notebook, 
+ 
+ 
+ 
+--------------------------------------------- 
+MAX is 10 
+ 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+ 1 to Insert new Word 
+ 2 to Display Dictionary 
+ 3 to Search a word 
+ 4 to Delete a word 
+ -1 to Clear whole Dictionary 
+  0 to Quit 
+Enter your choice : 0 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+ 
+Thank you for using this program :) 
   
 */</span></pre>
 </body>
