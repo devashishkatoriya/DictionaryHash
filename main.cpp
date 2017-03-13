@@ -30,7 +30,7 @@ class HashTable                                                     //Hash Table
 { 
     Entry *ht[MAX];
     void insert(Entry *);
-    inline int HashFunc(char []); 
+    int HashFunc(char []);
 public : 
     HashTable() 
     { 
@@ -53,6 +53,7 @@ public :
     void display(); 
     void search();
     void delete_word();
+    void update();
 }; 
  
 void HashTable::construct()                                           //Function for Insertion 
@@ -84,7 +85,7 @@ void HashTable::insert(Entry *B)                                         //Inser
     cout<<"\nWord inserted Successfully!";
 }
  
-inline int HashTable::HashFunc(char key[MAX])                             //Hash Function
+int HashTable::HashFunc(char key[])                             //Hash Function
 { 
     int i,total = 0; 
     for(i=0;key[i]!='\0';i++) 
@@ -115,43 +116,39 @@ void HashTable::display()                                               //Displa
  
 void HashTable::search()                                                //Search 
 { 
-    char word[MAX];
+    char word[LIMIT];
     int pos; 
     cout<<"\nEnter word to Search : ";
     cin>>word;
     pos = HashFunc(word);
-    if(strcmp(ht[pos]->word,word)==0)
+    Entry *temp;
+    temp = ht[pos];
+    while(temp!=NULL)
     {
-        cout<<"\nWord   \t: "<<ht[pos]->word;
-        cout<<"\nMeaning\t: "<<ht[pos]->meaning;
-        return; 
-    } 
-    else 
-    { 
-        Entry *temp;
-        temp = ht[pos]->next;
-        while(temp!=NULL)
+        if (strcmp(temp->word, word) == 0)
         {
-            if (strcmp(temp->word, word) == 0)
-            {
-                cout << "\nWord   \t: " << temp->word;
-                cout << "\nMeaning\t: " << temp->meaning;
-                return;
-            }
-            temp = temp->next;
+            cout << "\nWord   \t: " << temp->word;
+            cout << "\nMeaning\t: " << temp->meaning;
+            return;
         }
-        cout<<"\nWord NOT found!";
-    } 
+        temp = temp->next;
+    }
+    cout<<"\nWord NOT found!";
 }
 
 void HashTable::delete_word()                                                //Delete
 {
-    char word[MAX];
+    char word[LIMIT];
     int pos;
     cout<<"\nEnter word to Delete : ";
     cin>>word;
     pos = HashFunc(word);
-    if(strcmp(ht[pos]->word,word)==0)
+    if(ht[pos]==NULL)
+    {
+        cout<<"\nWord NOT found!";
+        return;
+    }
+    else if(strcmp(ht[pos]->word,word)==0)
     {
         ht[pos] = ht[pos]->next;
         cout<<"\nWord deleted Successfully!";
@@ -173,6 +170,29 @@ void HashTable::delete_word()                                                //D
     }
     cout<<"\nWord NOT found!";
 }
+
+void HashTable::update()
+{
+    char word[LIMIT];
+    int pos;
+    cout<<"\nEnter word to Modify : ";
+    cin>>word;
+    pos = HashFunc(word);
+    Entry *temp;
+    temp = ht[pos];
+    while(temp!=NULL)
+    {
+        if (strcmp(temp->word, word) == 0)
+        {
+            cout<<"\nEnter new Meaning : ";
+            cin>>temp->meaning;
+            cout<<"\nWord updated Successfully!";
+            return;
+        }
+        temp = temp->next;
+    }
+    cout<<"\nWord NOT found!";
+}
  
 //main() 
 int main() 
@@ -190,8 +210,9 @@ int main()
         cout<<"\n 2 to Display Dictionary";
         cout<<"\n 3 to Search a word";
         cout<<"\n 4 to Delete a word";
+        cout<<"\n 5 to Modify a word";
         cout<<"\n -1 to Clear whole Dictionary";
-        cout<<"\n  0 to Quit"; 
+        cout<<"\n  0 to Quit";
         cout<<"\nEnter your choice : "; 
         cin>>ch; 
         cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"; 
@@ -207,6 +228,9 @@ int main()
                 break;
             case 4 :
                 obj.delete_word();
+                break;
+            case 5 :
+                obj.update();
                 break;
             case -1 : cout<<"\nAre you sure, you want to clear dictionary (y/n) ? ";
                 cin>>choice; 
